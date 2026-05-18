@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <!-- google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One:ital@0;1&display=swap" rel="stylesheet">
+
+    <!--Tailwind & css-->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://flowbite.com/docs/main.css?4.0.1" id="theme"/>
+
+    <title>Web1 Project  - HomePage</title>
+
+    <style type="text/tailwindcss">
+      @theme{
+        --font-heading: "Changa One", cursive;
+        --font-body: "Trebuchet MS", Arial, Helvetica,   sans-serif;
+      }
+      @layer base {
+        body {
+          @apply font-body;
+        }
+        h1,
+        h2, 
+        h3,
+        h4, 
+        h5, 
+        h6, 
+        nav a {
+          @apply font-heading;
+        }
+      }
+      @layer components {
+        .active{
+          @apply !text-cyan-600;
+        }
+        .read-more{
+          @apply text-cyan-600 underline text-sm;
+        }
+        footer.active{
+          @apply !text-pink-300
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="w-screen h-screen flex justify-center items-center">
+      <div class="w-screen h-[50vh] px-4 py-4 bg-amber-100 hover:bg-cyan-600 text-center">
+          <a href="/public/index.html" class="text-7xl text-pink-400 hover:text-cyan-600 font-heading"><img src="public/images/welcom.jpg" class="w-full h-full"><br>Welcome to Project</a>
+      </div>
+    </div>
+    <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+    <!--sUPBASE-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/24880010.js"></script>
+    <script src="js/api/database.js"></script>
+    <script>
+    </script>
+  </body>
+</html>
