@@ -32,9 +32,23 @@ async function fetchDataById(id) {
     }
     return data;
 }
+
+async function fetchTestimonials(){
+    const { data, error} = await client
+        .from("testimonials")
+        .select(`*,user: users!testimonials_author_id_fkey(*)`);
+    if (error){
+        console.error(error);
+        return[];
+    }
+    return (data ?? []).map(({user, ...info }) => ({
+        ...info,
+        name: user?.name ?? "Anonymous",
+        email: user?.email ?? null,
+    }));
+}
+
 async function subscribe(email) {
     const {error} = await client.from('subscriptions').insert({email});
     if (error) throw error;
-
-    
 }
