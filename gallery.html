@@ -113,12 +113,12 @@
     <section class="max-w-7xl mx-auto p-8">
         <h1 class="font-heading text-7xl mb-8">Gallery</h1>
         <p class="text-neutral-700 text-md font-bold px-2">Filter by category</p>
-        <ul class="flex flex-wrap text-md font-bold text-center text-body">
+        <ul class="flex flex-wrap text-md font-bold text-center text-body" id="categories">
             <li class="me-2"><a href="gallery.html" class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft" >Show all</a></li>
             <li class="me-2"><a href="gallery.html" class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft" >Category 1</a></li>
             <li class="me-2"><a href="gallery.html" class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft" >Category 2</a></li>
         </ul>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery" >
             <div><a href="details.html"><img src="images/gallery/gallery-img1.jpg" alt=""class="rounded-md"></a></div>
             <div><a href="details.html"><img src="images/gallery/gallery-img2.jpg" alt=""class="rounded-md"></a></div>
             <div><a href="details.html"><img src="images/gallery/gallery-img3.jpg" alt=""class="rounded-md"></a></div>
@@ -158,6 +158,68 @@
       </nav>
       <div class="text-center">Copyright &copy; 2026 by 24880010 - Hồ Thị Thảo Dung</div>
     </footer>
+    <!--Flowbite-->
     <script src="https://flowbite.com/docs/flowbite.min.js"></script>
+
+   
+    <!--Handlerbar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+    <script id="categories-template" type="text/x-handlebars-template">
+      <li class="me-2" id="categoryAll"><a href="gallery.html" class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft" >Show all</a></li>
+      {{#each data}}
+      <li class="me-2" id="category{{id}}"><a href="gallery.html?category={{id}}" class="inline-block py-3 px-2 rounded-base hover:bg-neutral-secondary-soft">{{name}}</a></li>
+      {{/each}}
+    </script>
+    
+    <Script id="gallery-template" type="text/x-handlebars-template">
+      {{#each data}}
+      <div><a href="details.html"><img src="{{thumbpath}}" alt="{{title}}"class="rounded-md"></a></div>
+      {{/each}}
+    </Script>
+    <!--supabase-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/24880010.js"></script>
+    <script src="js/api/database.js"></script>
+    <script>
+      (async function(){
+        const[categories, gallery] = await Promise.all([
+          fetchCategoriesByType(),
+          fetchGallery(),
+        ]);
+        const selectedCategory = getSelectedCategoryFromURL();
+        const {selectedGallery, activeCategoryId} = selectGalleryByCategory(gallery, selectedCategory);
+
+        renderView("categories-template", "categories", categories);
+        renderView("gallery-template", "gallery", selectedGallery);
+
+        highlightCategoryTab(activeCategoryId);
+      })();
+
+      function getSelectedCategoryFromURL(){
+        const queryString = window.location.search;
+        const searchParams = new URLSearchParams(queryString);
+        return searchParams.get("category");
+      }
+
+      function selectGalleryByCategory(gallery, categoryId){
+        // mặc định all
+        if(!categoryId){ 
+          return {selectedGallery : gallery, activeCategoryId:"All"};
+        }
+        const filtered = gallery.filter(i => i.category_id == categoryId);
+        if(filtered.length === 0){
+          return {selectedGallery : gallery, activeCategoryId:"All"};
+        }
+        return {selectedGallery : filtered, activeCategoryId: categoryId};
+      }
+
+      function highlightCategoryTab(categoryId){
+        const categoriesRoot = document.querySelector('#categories');
+        if(!categoriesRoot) return;
+        categoriesRoot.querySelector(".active")?.classList.remove('active');
+        categoriesRoot.querySelector(`#category${categoryId} a`)?.classList.add('active');
+      }
+    </script>
+
   </body>
 </html>
